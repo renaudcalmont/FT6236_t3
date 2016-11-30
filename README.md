@@ -1,1 +1,1 @@
-FT6236_t3
+Hacked out the exemple Arduino sketch provided at www.buydisplay.com
