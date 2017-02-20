@@ -15,7 +15,7 @@ FT6236_t3::FT6236_t3(uint8_t addr, uint8_t irq) {
 }
 
 void FT6236_t3::begin() {
-    Wire1.begin(I2C_MASTER, 0x00, I2C_PINS_37_38, I2C_PULLUP_EXT, 400000);
+    Wire.begin(I2C_MASTER, 0x00, I2C_PINS_33_34, I2C_PULLUP_EXT, 400000);
     writeFT6236TouchRegister(0, 0); // device mode = Normal
     writeFT6236TouchRegister(0xA4, 0x00); // Interrupt polling mode
     pinMode(_irq, INPUT);
@@ -43,10 +43,10 @@ TouchEvent FT6236_t3::currentTouchEvent() {
 }
 
 void FT6236_t3::writeFT6236TouchRegister(uint8_t reg, uint8_t val) {
-    Wire1.beginTransmission(_addr);
-    Wire1.write(reg);
-    Wire1.write(val);
-    Wire1.endTransmission();  
+    Wire.beginTransmission(_addr);
+    Wire.write(reg);
+    Wire.write(val);
+    Wire.endTransmission();  
 }
 
 uint8_t FT6236_t3::readFT6236TouchLocation(TouchLocation *pLoc, uint8_t num) {
@@ -82,29 +82,29 @@ uint8_t FT6236_t3::readFT6236TouchLocation(TouchLocation *pLoc, uint8_t num) {
 }
 
 uint8_t FT6236_t3::readFT6236TouchRegister(uint8_t reg) {
-    Wire1.beginTransmission(_addr);
-    Wire1.write(reg);  // register 0
-    uint8_t retVal = Wire1.endTransmission();
+    Wire.beginTransmission(_addr);
+    Wire.write(reg);  // register 0
+    uint8_t retVal = Wire.endTransmission();
   
-    Wire1.requestFrom(_addr, uint8_t(1) );    // request 6 uint8_ts from slave device #2
+    Wire.requestFrom(_addr, uint8_t(1) );    // request 6 uint8_ts from slave device #2
   
-    if (Wire1.available()) {
-        retVal = Wire1.read();
+    if (Wire.available()) {
+        retVal = Wire.read();
     }
   
     return retVal;
 }
 
 uint8_t FT6236_t3::readFT6236TouchAddr(uint8_t regAddr, uint8_t *pBuf, uint8_t len) {
-    Wire1.beginTransmission(_addr);
-    Wire1.write(regAddr);  // register 0
-    Wire1.endTransmission();
+    Wire.beginTransmission(_addr);
+    Wire.write(regAddr);  // register 0
+    Wire.endTransmission();
   
-    Wire1.requestFrom(_addr, len);    // request 1 bytes from slave device #2
+    Wire.requestFrom(_addr, len);    // request 1 bytes from slave device #2
   
     uint8_t i;
-    for (i = 0; (i < len) && Wire1.available(); i++) {
-        pBuf[i] = Wire1.read();
+    for (i = 0; (i < len) && Wire.available(); i++) {
+        pBuf[i] = Wire.read();
     }
   
     return i;
